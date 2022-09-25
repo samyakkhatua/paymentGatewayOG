@@ -10,7 +10,7 @@ function App() {
       key: "rzp_test_97dwCasNnK2z0t",
       amount: data.amount,
       currency: data.currency,
-      name: "book.name",
+      name: "product name",
       description: "test transaction",
       order_id: data.id,
       handler: async (response) => {
@@ -23,7 +23,7 @@ function App() {
         }
       },
       theme: {
-        color: "#3399cc",
+        color: "#FFFFFF",
       }
     };
     const rzp1 = new window.Razorpay(options);
