@@ -24,10 +24,13 @@ function App() {
           console.log(error);
         }
       },
+      callback_url: "https://www.npmjs.com/package/react-razorpay",
+      redirect: "true",
       prefill: {
         name: "Gaurav Kumar",
         email: "samyak.khatua@example.com",
         contact: "9999999999",
+        method: "upi",
       },
       notes: {
         address: "Razorpay Corporate Office",
@@ -36,11 +39,12 @@ function App() {
         color: "#2d2b55",
       },
     };
-    
-    const rzp1 = new window.Razorpay(options);
+
+    const rzp1 = new Razorpay(options);
     rzp1.open();
   };
 
+  //handle payment on button click
   const handlePayment = async () => {
     try {
       const orderUrl = "http://localhost:8080/api/payment/orders";

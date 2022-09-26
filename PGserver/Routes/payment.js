@@ -16,11 +16,15 @@ router.post("/orders", async (req, res) => {
       receipt: crypto.randomBytes(10).toString("hex"),
     };
 
+    //API request and response for creating an order
     instance.orders.create(options, (error, order) => {
+
       if (error) {
         console.log(error);
         return res.status(500).json({ message: "Something went Wrong!" });
       }
+
+      console.log({ data: order });
       res.status(200).json({ data: order });
     });
   } catch (error) {
@@ -29,7 +33,6 @@ router.post("/orders", async (req, res) => {
   }
 });
 
-
 //verify payment
 router.post("/verify", async (req, res) => {
   try {
@@ -37,7 +40,7 @@ router.post("/verify", async (req, res) => {
       req.body;
 
     const sign = razorpay_order_id + "|" + razorpay_payment_id;
-    
+
     const expectedSign = crypto
       .createHmac("sha256", process.env.KEY_SECRET)
       .update(sign.toString())
@@ -48,7 +51,6 @@ router.post("/verify", async (req, res) => {
     } else {
       return res.status(400).json({ message: "Invalid signature sent!" });
     }
-    
   } catch (error) {
     res.status(500).json({ message: "Internal Server Error!" });
     console.log(error);
