@@ -1,9 +1,15 @@
 import axios from "axios";
 import { useState } from "react";
+import { Route, Routes, Link } from "react-router-dom";
+import ThankYouPage from "./pages/ThankYouPage";
 import "./App.css";
 
 function App() {
-  const [price, setPrice] = useState(500);
+  const [price, setPrice] = useState();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [countryCode, setCountryCode] = useState("91");
+  const [phone, setPhone] = useState("");
 
   const initPayment = (data) => {
     const options = {
@@ -24,19 +30,21 @@ function App() {
           console.log(error);
         }
       },
-      callback_url: "https://www.npmjs.com/package/react-razorpay",
+      callback_url: "https://google.com",
       redirect: "true",
       prefill: {
-        name: "Gaurav Kumar",
-        email: "samyak.khatua@example.com",
-        contact: "9999999999",
+        name: name,
+        email: email,
+        contact: `+${countryCode}${phone}`,
         method: "upi",
       },
       notes: {
-        address: "Razorpay Corporate Office",
+        name: name,
+        email: email,
+        phone: `+${countryCode}${phone}`,
       },
       theme: {
-        color: "#2d2b55",
+        color: "#f17272",
       },
     };
 
@@ -59,9 +67,51 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <button onClick={handlePayment}>buy now</button>
-    </div>
+    <>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <div className="App">
+              <input
+                type="text"
+                placeholder="name"
+                onChange={(e) => setName(e.target.value)}
+              />
+              <br />
+              <input
+                type="email"
+                placeholder="email"
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <br />
+
+              <input
+                type="number"
+                placeholder="country code"
+                onChange={(e) => setCountryCode(e.target.value)}
+              />
+              <input
+                type="phone"
+                placeholder="Phone number"
+                onChange={(e) => setPhone(e.target.value)}
+              />
+              <br />
+              <input
+                type="number"
+                placeholder="price"
+                onChange={(e) => setPrice(e.target.value)}
+              />
+              <button type="submit" onClick={handlePayment}>
+                buy now
+              </button>
+            </div>
+          }
+        />
+
+        <Route path="/thank-you" exact element={<ThankYouPage/>}/>
+      </Routes>
+    </>
   );
 }
 
