@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
-import { Route, Routes, Link } from "react-router-dom";
+import { Route, Routes} from "react-router-dom";
 import ThankYouPage from "./pages/ThankYouPage";
 import "./App.css";
 
@@ -12,26 +12,42 @@ function App() {
   const [phone, setPhone] = useState("");
 
   const initPayment = (data) => {
+    
     const options = {
       key: "rzp_test_97dwCasNnK2z0t",
       amount: data.amount,
       currency: data.currency,
-      name: "product name",
+      name: "Samyak Khatua",
       description: "description",
       order_id: data.id,
 
       handler: async (response) => {
-        try {
-          const verifyUrl = "http://localhost:8080/api/payment/verify";
+        console.log(response.razorpay_order_id);
+        console.log(response.razorpay_payment_id);
+        console.log(response.razorpay_signature);
 
-          const { data } = await axios.post(verifyUrl, response);
-          console.log(data);
-        } catch (error) {
-          console.log(error);
-        }
+
+
+        const {data} = await axios.post("http://3aeb-2401-4900-3bc0-1472-9039-a5e3-9c8d-ebde.in.ngrok.io/verify/razorpay-signature", response);
+        console.log(data);
+
+        // try {
+        //   const verifyUrl = "http://localhost:8080/api/payment/verify";
+
+        //   // const { data } = await axios.post(verifyUrl, response);
+        //   axios.post(verifyUrl, response);
+
+        //   // console.log(data);
+
+        // } catch (error) {
+        //   console.log(error);
+        //   // console.log(error.response.config.data.razorpay_payment_id);
+        //   // alert(error.response.config.data.razorpay_payment_id);
+        // }
       },
-      callback_url: "https://google.com",
-      redirect: "true",
+
+      // callback_url: "http://localhost:8080/api/payment/verifyhttp://3aeb-2401-4900-3bc0-1472-9039-a5e3-9c8d-ebde.in.ngrok.io/verify/razorpay-signature",
+
       prefill: {
         name: name,
         email: email,
@@ -58,9 +74,11 @@ function App() {
       const orderUrl = "http://localhost:8080/api/payment/orders";
 
       const { data } = await axios.post(orderUrl, { amount: price });
-      console.log(data);
+
+      console.log(data.data);
 
       initPayment(data.data);
+
     } catch (error) {
       console.log(error);
     }
@@ -72,6 +90,8 @@ function App() {
         <Route
           path="/"
           element={
+            <>
+            
             <div className="App">
               <input
                 type="text"
@@ -90,6 +110,7 @@ function App() {
                 type="number"
                 placeholder="country code"
                 onChange={(e) => setCountryCode(e.target.value)}
+                value="91"
               />
               <input
                 type="phone"
@@ -106,10 +127,13 @@ function App() {
                 buy now
               </button>
             </div>
+
+
+            </>
           }
         />
 
-        <Route path="/thank-you" exact element={<ThankYouPage/>}/>
+        <Route path="/thank-you" element={<ThankYouPage/>}/>
       </Routes>
     </>
   );
